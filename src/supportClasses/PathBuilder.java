@@ -24,9 +24,14 @@ public class PathBuilder {
             Coordinate start = worldMap.getCoordinate(creature);
             Coordinate target = targetSetter.setTarget(start);
             if (target.equals(start) || start == null) {
-                break;
+                if (targetSetter.getWasAttemptToSwitchTarget()) {
+                    break;
+                } else {
+                    targetSetter.switchTargetClass();
+                    continue;
+                }
             }
-            reachableLocations.add(start);
+
             path = createPathToTarget(start, target);
             if (path.isEmpty()) {
                 targetSetter.removeTarget(target);
@@ -38,6 +43,9 @@ public class PathBuilder {
     }
 
     private List<Coordinate> createPathToTarget(Coordinate start, Coordinate target) {
+        reachableLocations.clear();
+        exploredLocations.clear();
+        reachableLocations.add(start);
         List<Coordinate> path = new LinkedList<>();
         while (!reachableLocations.isEmpty()) {
             Coordinate coordinateToCheck = getCoordinateToCheck(target);
@@ -76,7 +84,7 @@ public class PathBuilder {
                 exploredLocations.removeLast();
             } else {
                 double maxDistance = worldMap.getMapMaxDistance();
-                Coordinate next = null;
+                Coordinate next = new Coordinate(target.getRow(), target.getColumn());
                 for (Coordinate coordinate : worldMap.getNearestLocations(path.getLast())) {
                     if (exploredLocations.contains(coordinate)) {
                         double distance = worldMap.getShortestPathDistance(coordinate, start);
@@ -85,6 +93,10 @@ public class PathBuilder {
                             next = coordinate;
                         }
                     }
+                }
+                if (target.equals(next)) {
+                    path.clear();
+                    break;
                 }
                 while (exploredLocations.contains(next)) {
                     exploredLocations.removeLast();

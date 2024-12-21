@@ -1,5 +1,6 @@
 package supportClasses;
 
+import entities.Creature;
 import entities.Entity;
 import entities.alive.Herbivore;
 import entities.alive.Predator;
@@ -33,26 +34,25 @@ public class MapPrinter {
             }
             System.out.println(line);
         }
-
         counterOfIterations.increaseCounter();
         System.out.println(counterOfIterations.getCounter());
     }
 
     private String getEntitySprite(Entity entity) {
         if (entity instanceof Herbivore) {
-            return ANSI_GREEN_BACKGROUND + ANSI_BLACK + Sprites.HERBIVORE.getSprite() + ANSI_RESET;
+            return ANSI_GREEN_BACKGROUND + ANSI_BLACK + ((Creature) entity).getHealth() +Sprites.HERBIVORE.getSprite() + ((Herbivore) entity).showAim() + ANSI_RESET;
         }
         if (entity instanceof Predator) {
-            return ANSI_GREEN_BACKGROUND + ANSI_BLACK + Sprites.PREDATOR.getSprite() + ANSI_RESET;
+            return ANSI_GREEN_BACKGROUND + ANSI_BLACK + ((Creature) entity).getHealth() + Sprites.PREDATOR.getSprite() + ((Predator) entity).showAim() + ANSI_RESET;
         }
         if (entity instanceof Rock) {
-            return ANSI_GREEN_BACKGROUND + Sprites.ROCK.getSprite() + ANSI_RESET;
+            return ANSI_GREEN_BACKGROUND + " " + Sprites.ROCK.getSprite() + " " +ANSI_RESET;
         }
         if (entity instanceof Tree) {
-            return ANSI_GREEN_BACKGROUND + Sprites.TREE.getSprite() + ANSI_RESET;
+            return ANSI_GREEN_BACKGROUND + " " + Sprites.TREE.getSprite() + " " + ANSI_RESET;
         }
         if (entity instanceof Grass) {
-            return ANSI_GREEN_BACKGROUND + Sprites.GRASS.getSprite() + ANSI_RESET;
+            return ANSI_GREEN_BACKGROUND + " " + Sprites.GRASS.getSprite() + " " + ANSI_RESET;
         }
         return " error ";
     }

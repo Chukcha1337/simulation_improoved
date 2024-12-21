@@ -9,11 +9,24 @@ public class TargetSetter {
     private final WorldMap worldMap;
     private final Creature creature;
     private final Set<Coordinate> AllTargets;
+    private boolean wasAttemptToSwitchTarget;
 
     public TargetSetter(WorldMap worldMap, Creature creature) {
         this.worldMap = worldMap;
         this.creature = creature;
+        wasAttemptToSwitchTarget = false;
         AllTargets = new HashSet<>();
+        locateAllTargets();
+    }
+
+    public boolean getWasAttemptToSwitchTarget() {
+        return wasAttemptToSwitchTarget;
+    }
+
+    public void switchTargetClass() {
+        wasAttemptToSwitchTarget = true;
+        creature.reverseWishToReproduce();
+        AllTargets.clear();
         locateAllTargets();
     }
 
@@ -22,9 +35,18 @@ public class TargetSetter {
     }
 
     private void locateAllTargets() {
-        for (Entity entity : worldMap.getAll()) {
-            if (entity.getClass().equals(creature.getFood())) {
-                AllTargets.add(worldMap.getCoordinate(entity));
+        Class<?> target = chooseOfTarget();
+        if (target.equals(creature.getClass())) {
+            for (Entity entity : worldMap.getAll()) {
+                if (entity.getClass().equals(target) && !entity.equals(creature) && ((Creature) entity).isWishToReproduce()) {
+                    AllTargets.add(worldMap.getCoordinate(entity));
+                }
+            }
+        } else if (target.equals(creature.getFood())) {
+            for (Entity entity : worldMap.getAll()) {
+                if (entity.getClass().equals(target)) {
+                    AllTargets.add(worldMap.getCoordinate(entity));
+                }
             }
         }
     }
@@ -40,5 +62,12 @@ public class TargetSetter {
             }
         }
         return targetCoordinate;
+    }
+
+    private Class<?> chooseOfTarget() {
+        if (creature.isWishToReproduce()) {
+            return creature.getClass();
+        }
+        return creature.getFood();
     }
 }

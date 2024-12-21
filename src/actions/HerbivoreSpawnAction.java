@@ -5,7 +5,7 @@ import entities.alive.Herbivore;
 import supportClasses.Coordinate;
 
 public class HerbivoreSpawnAction extends SpawnAction {
-    private final static double MAX_HERBIVORES_MULTIPLIER = 0.020;
+    private final static double MAX_HERBIVORES_MULTIPLIER = 0.03;
 
     @Override
     protected Class<? extends Entity> getCurrentEntityClass() {

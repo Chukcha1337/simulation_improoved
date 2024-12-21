@@ -17,6 +17,15 @@ public abstract class SpawnAction extends Action {
         }
     }
 
+    public void reproduce (WorldMap worldMap, Entity entity) {
+        for (Coordinate coordinate : worldMap.getNearestLocations(worldMap.getCoordinate(entity))) {
+            if (worldMap.isEmpty(coordinate)) {
+                worldMap.put(coordinate, createNewEntity(coordinate));
+                break;
+            }
+        }
+    }
+
     private int getMaximumQuantity(WorldMap worldMap) {
         return (int) Math.ceil(worldMap.getRows() * worldMap.getColumns() * getMaxQuantityMultiplier());
     }

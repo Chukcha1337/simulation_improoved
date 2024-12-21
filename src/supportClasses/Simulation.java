@@ -5,19 +5,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-
 public class Simulation {
     private static final String START = "g";
     private static final String PAUSE = "p";
     private static final String RESUME = "r";
-    private static final String STOP = "s";
+    private static final String STOP = "q";
     private static final Scanner scanner = new Scanner(System.in);
     private final WorldMap worldMap;
     private final MapPrinter mapPrinter;
     private final List<Action> initActions;
     private final List<Action> turnActions;
-    private volatile boolean paused = false;
-    private volatile boolean running = true;
+    private volatile boolean isSimulationPaused = false;
+    private volatile boolean isSimulationRunning = true;
     private final Object lock = new Object();
 
     public Simulation(WorldMap worldMap) {
@@ -45,9 +44,9 @@ public class Simulation {
             }
         }
         Thread currentSimulation = new Thread(() -> {
-            while (running) {
+            while (isSimulationRunning) {
                 synchronized (lock) {
-                    while (paused) {
+                    while (isSimulationPaused) {
                         try {
                             lock.wait();
                         } catch (InterruptedException e) {
@@ -56,23 +55,23 @@ public class Simulation {
                     }
                 }
                 try {
-                    Thread.sleep(500);
                     nextTurn();
+                    Thread.sleep(500);
                 } catch (InterruptedException e) {
                     System.out.println("Simulation interrupted");
                 }
             }
-            System.out.println("Simulation stopped.");
+            System.out.println("Симуляция закончена");
         });
 
         Thread controlThread = new Thread(() -> {
-            while (running) {
+            while (isSimulationRunning) {
                 String command = scanner.nextLine().trim();
                 switch (command.toLowerCase()) {
-                    case "p" -> pauseSimulation();
-                    case "r" -> resumeSimulation();
-                    case "q" -> stopSimulation();
-                    default -> System.out.println("Invalid command");
+                    case PAUSE -> pauseSimulation();
+                    case RESUME -> resumeSimulation();
+                    case STOP -> stopSimulation();
+                    default -> System.out.printf("Неизвестная команда, введите только ('%s'), ('%s') или ('%s')", PAUSE, RESUME, STOP);
                 }
 
             }
@@ -113,23 +112,23 @@ public class Simulation {
 
     private void pauseSimulation() {
         synchronized (lock) {
-            paused = true;
-            System.out.println("Simulation paused.");
+            isSimulationPaused = true;
+            System.out.printf("Симуляция приостановлена, введите ('%s') для продолжения\n", RESUME);
         }
     }
 
     private void resumeSimulation() {
         synchronized (lock) {
-            paused = false;
+            isSimulationPaused = false;
             lock.notify();
-            System.out.println("Simulation continued.");
+            System.out.printf("Симуляция продолжается, введите ('%s') для паузы или ('%s') для выхода \n", PAUSE, STOP);;
         }
     }
 
     private void stopSimulation() {
-        running = false;
+        isSimulationRunning = false;
         resumeSimulation();
-        System.out.println("Simulation stopping...");
+        System.out.println("Симуляция в процессе остановки, миру конец...");
     }
 
 
