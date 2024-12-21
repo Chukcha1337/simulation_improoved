@@ -1,15 +1,12 @@
 package supportClasses;
 
+import static supportClasses.Commands.*;
 import actions.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Simulation {
-    private static final String START = "g";
-    private static final String PAUSE = "p";
-    private static final String RESUME = "r";
-    private static final String STOP = "q";
     private static final Scanner scanner = new Scanner(System.in);
     private final WorldMap worldMap;
     private final MapPrinter mapPrinter;
@@ -37,7 +34,7 @@ public class Simulation {
                 """, START, PAUSE, RESUME, STOP);
         while (true) {
             String decision = scanner.nextLine().trim().toLowerCase();
-            if (decision.equals(START)) {
+            if (decision.equals(START.toString())) {
                 break;
             } else {
                 System.out.printf("Вы ввели неизвестную команду! Для старта симуляции введите только ('%s')\n", START);
@@ -67,13 +64,15 @@ public class Simulation {
         Thread controlThread = new Thread(() -> {
             while (isSimulationRunning) {
                 String command = scanner.nextLine().trim();
-                switch (command.toLowerCase()) {
-                    case PAUSE -> pauseSimulation();
-                    case RESUME -> resumeSimulation();
-                    case STOP -> stopSimulation();
-                    default -> System.out.printf("Неизвестная команда, введите только ('%s'), ('%s') или ('%s')", PAUSE, RESUME, STOP);
+                if (command.equals(PAUSE.toString())) {
+                    pauseSimulation();
+                } else if (command.equals(RESUME.toString())) {
+                    resumeSimulation();
+                } else if (command.equals(STOP.toString())) {
+                    stopSimulation();
+                } else {
+                    System.out.printf("Неизвестная команда, введите только ('%s'), ('%s') или ('%s')", PAUSE, RESUME, STOP);
                 }
-
             }
         });
         currentSimulation.start();
@@ -121,7 +120,8 @@ public class Simulation {
         synchronized (lock) {
             isSimulationPaused = false;
             lock.notify();
-            System.out.printf("Симуляция продолжается, введите ('%s') для паузы или ('%s') для выхода \n", PAUSE, STOP);;
+            System.out.printf("Симуляция продолжается, введите ('%s') для паузы или ('%s') для выхода \n", PAUSE, STOP);
+            ;
         }
     }
 
@@ -130,9 +130,4 @@ public class Simulation {
         resumeSimulation();
         System.out.println("Симуляция в процессе остановки, миру конец...");
     }
-
-
-
-
-
 }

@@ -3,7 +3,6 @@ package entities;
 import supportClasses.Coordinate;
 import supportClasses.PathBuilder;
 import supportClasses.WorldMap;
-
 import java.util.List;
 
 public abstract class Creature extends Entity {
@@ -18,7 +17,7 @@ public abstract class Creature extends Entity {
     protected Class<?> food;
 
     public void makeMove(WorldMap worldMap) {
-        if (health < Math.round((float) maxHealth /2)) {
+        if (health < Math.round((float) maxHealth / 2)) {
             setWishToReproduce(false);
         }
         ateThisTurn = false;
@@ -35,14 +34,14 @@ public abstract class Creature extends Entity {
                 takeStep(worldMap, nextStep);
             } else if (worldMap.get(nextStep).getClass() == this.food) {
                 eat(worldMap, nextStep);
-            } else if (reproductionIsPossible(worldMap,nextStep)) {
+            } else if (reproductionIsPossible(worldMap, nextStep)) {
                 reproduce(worldMap);
                 break;
             }
         }
         renewParametersAfterTurn(worldMap);
-
     }
+
     private void setWishToReproduce(boolean isWishToReproduce) {
         this.isWishToReproduce = isWishToReproduce;
     }
@@ -70,9 +69,9 @@ public abstract class Creature extends Entity {
     }
 
     private boolean reproductionIsPossible(WorldMap worldMap, Coordinate nextStep) {
-        return (worldMap.get(nextStep).getClass() == this.getClass() &&
-                isWishToReproduce &&
-                ((Creature) worldMap.get(nextStep)).isWishToReproduce());
+        return (worldMap.get(nextStep).getClass() == this.getClass()
+                && isWishToReproduce
+                && ((Creature) worldMap.get(nextStep)).isWishToReproduce());
     }
 
     public void decreaseStepsLeft() {
@@ -88,7 +87,7 @@ public abstract class Creature extends Entity {
     }
 
     public String showAim() {
-        if(isWishToReproduce) {
+        if (isWishToReproduce) {
             return "s";
         } else {
             return "e";
@@ -126,7 +125,7 @@ public abstract class Creature extends Entity {
         decreaseStepsLeft();
     }
 
-    protected void renewCreatureParameters (int maxHungerDecrease, int maxHealNumber) {
+    protected void renewCreatureParameters(int maxHungerDecrease, int maxHealNumber) {
         if (levelOfHunger > maxHungerDecrease) {
             levelOfHunger -= maxHungerDecrease;
         } else {
@@ -135,7 +134,7 @@ public abstract class Creature extends Entity {
         ateThisTurn = true;
         if (health <= (maxHealth - maxHealNumber)) {
             recoverHealth(maxHealNumber);
-        }  else {
+        } else {
             health = maxHealth;
         }
     }

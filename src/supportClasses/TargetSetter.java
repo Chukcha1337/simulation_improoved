@@ -19,6 +19,19 @@ public class TargetSetter {
         locateAllTargets();
     }
 
+    public Coordinate setTarget(Coordinate creatureCurrentCoordinate) {
+        double ShortestDistance = worldMap.getMapMaxDistance();
+        Coordinate targetCoordinate = creatureCurrentCoordinate;
+        for (Coordinate coordinate : AllTargets) {
+            double distanceToCurrentTarget = worldMap.getShortestPathDistance(creatureCurrentCoordinate, coordinate);
+            if (distanceToCurrentTarget < ShortestDistance) {
+                ShortestDistance = distanceToCurrentTarget;
+                targetCoordinate = coordinate;
+            }
+        }
+        return targetCoordinate;
+    }
+
     public boolean getWasAttemptToSwitchTarget() {
         return wasAttemptToSwitchTarget;
     }
@@ -35,39 +48,33 @@ public class TargetSetter {
     }
 
     private void locateAllTargets() {
-        Class<?> target = chooseOfTarget();
-        if (target.equals(creature.getClass())) {
-            for (Entity entity : worldMap.getAll()) {
-                if (entity.getClass().equals(target) && !entity.equals(creature) && ((Creature) entity).isWishToReproduce()) {
-                    AllTargets.add(worldMap.getCoordinate(entity));
-                }
-            }
-        } else if (target.equals(creature.getFood())) {
-            for (Entity entity : worldMap.getAll()) {
-                if (entity.getClass().equals(target)) {
-                    AllTargets.add(worldMap.getCoordinate(entity));
-                }
-            }
-        }
-    }
-
-    public Coordinate setTarget(Coordinate creatureCurrentCoordinate) {
-        double ShortestDistance = worldMap.getMapMaxDistance();
-        Coordinate targetCoordinate = creatureCurrentCoordinate;
-        for (Coordinate coordinate : AllTargets) {
-            double distanceToCurrentTarget = worldMap.getShortestPathDistance(creatureCurrentCoordinate, coordinate);
-            if (distanceToCurrentTarget < ShortestDistance) {
-                ShortestDistance = distanceToCurrentTarget;
-                targetCoordinate = coordinate;
-            }
-        }
-        return targetCoordinate;
-    }
-
-    private Class<?> chooseOfTarget() {
         if (creature.isWishToReproduce()) {
-            return creature.getClass();
+            locateAllReadyToBreed();
+        } else {
+            locateAllFood();
         }
-        return creature.getFood();
     }
+
+    private void locateAllReadyToBreed() {
+        for (Entity entity : worldMap.getAll()) {
+            if (isThisCreatureWantToBreedToo(entity)) {
+                AllTargets.add(worldMap.getCoordinate(entity));
+            }
+        }
+    }
+
+    private void locateAllFood() {
+        for (Entity entity : worldMap.getAll()) {
+            if (entity.getClass().equals(creature.getFood())) {
+                AllTargets.add(worldMap.getCoordinate(entity));
+            }
+        }
+    }
+
+    private boolean isThisCreatureWantToBreedToo(Entity entity) {
+        return (entity.getClass().equals(creature.getClass())
+                && !entity.equals(creature)
+                && ((Creature) entity).isWishToReproduce());
+    }
+
 }

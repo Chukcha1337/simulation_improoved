@@ -40,13 +40,13 @@ public class MapPrinter {
 
     private String getEntitySprite(Entity entity) {
         if (entity instanceof Herbivore) {
-            return ANSI_GREEN_BACKGROUND + ANSI_BLACK + ((Creature) entity).getHealth() +Sprites.HERBIVORE.getSprite() + ((Herbivore) entity).showAim() + ANSI_RESET;
+            return ANSI_GREEN_BACKGROUND + ANSI_BLACK + ((Creature) entity).getHealth() + Sprites.HERBIVORE.getSprite() + ((Herbivore) entity).showAim() + ANSI_RESET;
         }
         if (entity instanceof Predator) {
             return ANSI_GREEN_BACKGROUND + ANSI_BLACK + ((Creature) entity).getHealth() + Sprites.PREDATOR.getSprite() + ((Predator) entity).showAim() + ANSI_RESET;
         }
         if (entity instanceof Rock) {
-            return ANSI_GREEN_BACKGROUND + " " + Sprites.ROCK.getSprite() + " " +ANSI_RESET;
+            return ANSI_GREEN_BACKGROUND + " " + Sprites.ROCK.getSprite() + " " + ANSI_RESET;
         }
         if (entity instanceof Tree) {
             return ANSI_GREEN_BACKGROUND + " " + Sprites.TREE.getSprite() + " " + ANSI_RESET;

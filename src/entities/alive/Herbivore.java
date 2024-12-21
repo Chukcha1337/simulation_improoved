@@ -24,13 +24,13 @@ public class Herbivore extends Creature {
     @Override
     protected void reproduce(WorldMap worldMap) {
         SpawnAction producer = new HerbivoreSpawnAction();
-        producer.reproduce(worldMap,this);
+        producer.reproduce(worldMap, this);
     }
 
     @Override
     protected void eat(WorldMap worldMap, Coordinate coordinate) {
         takeStep(worldMap, coordinate);
-        renewCreatureParameters (1,1);
+        renewCreatureParameters(1, 1);
     }
 
 

@@ -5,7 +5,6 @@ import actions.SpawnAction;
 import entities.Creature;
 import supportClasses.Coordinate;
 import supportClasses.WorldMap;
-
 import java.util.Random;
 
 public class Predator extends Creature {
@@ -14,7 +13,7 @@ public class Predator extends Creature {
     public Predator() {
         health = 9;
         maxHealth = 9;
-        speed = 3;
+        speed = 4;
         levelOfHunger = 1;
         isWishToReproduce = false;
         ateThisTurn = false;

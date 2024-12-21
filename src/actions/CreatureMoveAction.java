@@ -9,7 +9,7 @@ public class CreatureMoveAction extends Action {
     @Override
     public void execute(WorldMap worldMap) {
         for (Entity entity : worldMap.getAll()) {
-            if (entity instanceof Creature && ((Creature) entity).isAlive()){
+            if (entity instanceof Creature && ((Creature) entity).isAlive()) {
                 ((Creature) entity).makeMove(worldMap);
             }
         }
