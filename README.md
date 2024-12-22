@@ -7,21 +7,21 @@ When you run it, there'll be a description with commands to pause/resume/stop si
 Don't forget them, because simulation iterations switch very quickly, so you may not notice 
 a notification of this commands while stopping or pausing and would have to scroll up to find them.
 
-    At the console field, every creature have same algorithm of representation:
+At the console field, every creature have same algorithm of representation:
 First number (left from creature's sprite) is current creature's health. 
 It can be decreased based on hunger level or in case of predator attack (for herbivores)
 Then you can see actual creature's sprite, and the following character is creature's aim: 
 (e) - creature wants to eat, (s) - creature wants to reproduce.
 So final representation for creatures will be like (current health/creature's sprite/current aim)
 
-    Balance of predators/herbivores can be regulated by predator attack damage, max hunger level to cancel attempts 
+Balance of predators/herbivores can be regulated by predator attack damage, max hunger level to cancel attempts 
 of reproducing, recovering health and som other parameters.
 Current balance set to be optimal, but random start positions can cause predators extinction, 
 so I've made adding herbivores to minimum quantity every turn action.
 Btw predators still have chance go extinct, because making them too strong causing uncontrolled and 
 unhindered reproduction, so you can just stop it and run new one.
 
-    Reproducing method was made to prevent uncontrolled action, so every creature that has wish to reproduce 
+Reproducing method was made to prevent uncontrolled action, so every creature that has wish to reproduce 
 set only same wishers as possible targets.
 More over, when creature reaches another one, it's one more verification that both of them want to reproduce, 
 and only if it's true, reproduction action may be started.
