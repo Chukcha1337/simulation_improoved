@@ -1,6 +1,5 @@
 package supportClasses;
 
-import static supportClasses.Commands.*;
 import actions.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,13 +32,14 @@ public class Simulation {
                 Для паузы во время симуляции введите ('%s')
                 Для возобновления симуляции во время паузы введите ('%s')
                 Для остановки симуляции введите ('%s')
-                """, START, PAUSE, RESUME, STOP);
+                """, Commands.START, Commands.PAUSE, Commands.RESUME, Commands.STOP);
         while (true) {
             String decision = scanner.nextLine().trim().toLowerCase();
-            if (decision.equals(START.toString())) {
+            if (decision.equals(Commands.START.toString())) {
                 break;
             } else {
-                System.out.printf("Вы ввели неизвестную команду! Для старта симуляции введите только ('%s')\n", START);
+                System.out.printf("Вы ввели неизвестную команду! Для старта симуляции введите только ('%s')\n",
+                        Commands.START);
             }
         }
         Thread currentSimulation = new Thread(() -> {
@@ -66,14 +66,15 @@ public class Simulation {
         Thread controlThread = new Thread(() -> {
             while (isSimulationRunning) {
                 String command = scanner.nextLine().trim();
-                if (command.equals(PAUSE.toString())) {
+                if (command.equals(Commands.PAUSE.toString())) {
                     pauseSimulation();
-                } else if (command.equals(RESUME.toString())) {
+                } else if (command.equals(Commands.RESUME.toString())) {
                     resumeSimulation();
-                } else if (command.equals(STOP.toString())) {
+                } else if (command.equals(Commands.STOP.toString())) {
                     stopSimulation();
                 } else {
-                    System.out.printf("Неизвестная команда, введите только ('%s'), ('%s') или ('%s')", PAUSE, RESUME, STOP);
+                    System.out.printf("Неизвестная команда, введите только ('%s'), ('%s') или ('%s')",
+                            Commands.PAUSE, Commands.RESUME, Commands.STOP);
                 }
             }
         });
@@ -114,7 +115,7 @@ public class Simulation {
     private void pauseSimulation() {
         synchronized (lock) {
             isSimulationPaused = true;
-            System.out.printf("Симуляция приостановлена, введите ('%s') для продолжения\n", RESUME);
+            System.out.printf("Симуляция приостановлена, введите ('%s') для продолжения\n", Commands.RESUME);
         }
     }
 
@@ -122,7 +123,8 @@ public class Simulation {
         synchronized (lock) {
             isSimulationPaused = false;
             lock.notify();
-            System.out.printf("Симуляция продолжается, введите ('%s') для паузы или ('%s') для выхода \n", PAUSE, STOP);
+            System.out.printf("Симуляция продолжается, введите ('%s') для паузы или ('%s') для выхода \n",
+                    Commands.PAUSE, Commands.STOP);
         }
     }
 
