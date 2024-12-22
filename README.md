@@ -1,5 +1,5 @@
 Welcome to my version of Simulation Java project!
-First of all, thanks for checking it, if i can get your feedback it would be awesome and alse it would help me a lot.
+First of all, thanks for checking it, if i can get your feedback it would be awesome and also it would help me a lot.
 
 About build. 
 Main method is at Starter class. When you run it, there'll be a discription with commands to pause/resume/stop simulation. 
